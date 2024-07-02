@@ -1,0 +1,12 @@
+Anna: a lightning-fast static site generator written in Go
+
+6th July 2024
+
+Adhesh Athrey, Aditya Hegde, Anirudh Sudhir, Nathan Paul
+
+gh/anna-ssg
+
+* Anna is designed to be fast, highly configurable and easy to use. 
+Currently, anna beats Hugo and Eleventy, another widely used static site generator implemented in JavaScript, on several benchmarks
+
+.image anna.png _ 300 
