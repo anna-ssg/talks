@@ -54,8 +54,25 @@ This was just a playful stunt that we engaged in. We planned on beating Saaru at
 
 ## Profiling
 
-.code -edit ./deepdatamerge/main.go
+The project's primary goal was to optimize performance. To achieve this, the first task undertaken was to implement a code profiling mechanism. This allowed the team to analyze the code's execution time and identify potential bottlenecks for further optimization.
 
+The goal of the project was to optimize performance, and the team utilized the Pprof library as a one-stop solution for profiling and performance analysis. By implementing a code profiling mechanism using Pprof, the team was able to analyze the execution time of the code and identify potential bottlenecks for further optimization. This allowed them to focus on improving the performance of the static site generator and achieve faster rendering times. The Pprof library provided valuable insights into the code's execution, enabling the team to make informed decisions and optimize the performance of the project effectively.
+
+## Basic implementation
+
+.code -edit ./Profiling/main.go
+
+## Directory Watchdog and Live Render
+
+We implemented a directory watchdog system to streamline our workflow, avoiding the need to manually restart the program for code or content changes. This system monitors the working directory for modifications, automatically triggering a rerendering process and updating the output in real-time. Additionally, it serves the rendered content for easy previewing, allowing us to see changes immediately. This improvement has made our development process more efficient and seamless, enabling quick iterations without manual intervention.
+
+## POC 
+
+We implemented a live reload system using a liveReload struct to enhance our development workflow. The struct maintains an error logger, a map of file modification times, directories to monitor, file extensions to watch, a server status flag, and the site data path.
+
+.code ./LiveReload/main.go /START OMIT/,/END OMIT/
+
+The system scans specified directories for changes in files with given extensions. When a change in fileTimes is detected, it triggers the LiveReload pipeline to rerender content and update the output. This ensures real-time previews without manual intervention, enhancing development efficiency.
 
 ## An important ease-of-use feature was a GUI
 
@@ -73,12 +90,62 @@ The wizard lets a user pick a theme, enter your name, pick navbar elements, and 
 
 ## Parallel Rendering pipelines
 
-.code -edit ./deepdatamerge/main.go
+To build a fast and efficient static site generator , we implemented parallel rendering using goroutines. Instead of rendering Markdown files iteratively, we utilized goroutines to process them concurrently.
 
+By spawning a goroutine for each Markdown file, we significantly reduced the rendering time. This approach leverages Go's concurrency model, allowing multiple files to be rendered simultaneously, thus improving overall performance.
 
-## Benchmarking
+## Curent Parallel Rendering Pipeline Model 
 
-.code -edit ./deepdatamerge/main.go
+.code ./ParaRender/main.go
+
+## Future Optimizations Plans
+
+To further enhance performance, future plans include:
+
+*Fine-Tuning the Parallel Rendering Pipeline:*
+- Refine our current parallel rendering process to achieve even better efficiency and speed.
+
+*Switching to bufio:*
+- Utilize bufio for more efficient buffered I/O operations, replacing regular I/O methods.
+
+*Caching Frequently Used Files:*
+- Implement caching for frequently accessed files, such as templates, to reduce load times.
+
+## Future Optimizations Plans
+
+*Worker Pool Implementation:*
+- Introduce a worker pool to manage concurrent rendering tasks more effectively.
+
+*File Read-Ahead:*
+- Implement file read-ahead strategies to minimize idle time by preloading necessary data.
+
+*Optimizing I/O Operations:*
+- Streamline other I/O processes to reduce the number of syscalls, thereby improving overall performance.
+
+## Benchmarking and Stress Testing
+
+With all current optimizations and future plans in place, we recognized the need for a comprehensive benchmarking and stress testing strategy to evaluate our progress and compare it against competitors. This involves:
+
+*Base Performance Metrics:*
+- Measure key performance indicators (KPIs) such as render time, memory usage, and CPU utilization for our static site generator with the help of the profiling system already set up.
+
+*Creating Benchmarking Scenarios:*
+- Develop a variety of test cases, including different site sizes, complexity levels, and types of content, to assess performance under various conditions.
+
+## Benchmarking and Stress Testing
+
+*Stress Testing:*
+- Conduct stress tests to push the system to its limits and identify bottlenecks by rendering thousands of Markdown content pages. This helps in understanding how the system performs under heavy load and what areas need improvement.
+
+*Comparative Analysis:*
+- Benchmark our static site generator against competitors, using the same test scenarios, to see where we stand and to identify areas for possible optimization.
+
+*Continuous Monitoring and Feedback:*
+- With the tools implemented so far, such as Live Render and Profiling, we can achieve continuous monitoring during the benchmarking process. These tools provide real-time feedback and detailed reports on performance metrics.
+
+## Benchmark Data and Tested Cases and Related Information
+
+Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison from pre para render and post) and other ssg performance, and images if any, and write stuff if u want ill also look into it after u done
 
 ## Bootstrapping themes
 
@@ -92,33 +159,3 @@ The wizard lets a user pick a theme, enter your name, pick navbar elements, and 
 
 .code -edit ./deepdatamerge/main.go
 
-
-## Subsection
-
-- bullets
-- more bullets
-- a bullet continued
-  on the next line
-
-## Section 1: Buildlog
-
-Some More text
-
-	Preformatted text (code block)
-	is indented (by one tab, or four spaces)
-
-Further Text, including command invocations.
-
-## Section 2: Example formatting
-
-Formatting:
-
-_italic_
-// A comment that is completely ignored.
-: Speaker notes.
-**bold**
-`program`
-Markup—_especially italic text_—can easily be overused.
-_Why use scoped\_ptr_? Use plain **\*ptr** instead.
-
-Visit [the Go home page](https://golang.org/).
