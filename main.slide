@@ -125,16 +125,22 @@ The wizard lets a user pick a theme, enter your name, pick navbar elements, and 
 
 .image wizard.gif 
 
-
 ## Bootstrapping themes
+A catalog of themes are up on our GitHub, with a json index. Anna pulls the latest ones, populates a list of themes you can pick with the wizard.
 
 .code -edit ./BootstrapThemes/themes.go
 
-A catalog of themes are up on our anna-ssg org on GitHub, with a json index. Anna pulls the latest index, populates a list of themes you can pick with the wizard lets the user decide what theme they want.
+## Asynchronous 
+Signals are asynchronous processed using a channel (FormSubmittedCh)
+
+.code -edit ./Wizard/wizard1.go
 
 ## After successfully completing the setup, the wizard launches a live preview of your site in a new tab
 
-.code -edit ./Wizard/wizard.go
+.code -edit ./Wizard/wizard2.go
+
+This ensures robust error handling for various stages like JSON decoding, file writing, and theme downloading.
+
 
 ## Deepdatamerge
 
@@ -217,4 +223,11 @@ Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison 
 - Provide Compatibility with Hugo Theme another widely used SSG implemented in GoLang.
 - Access a wide range of themes from Hugo's extensive community ecosystem.
 
+## Usecases
+We use anna personal websites, and wikis. An in the works, our redesigned college club website [HSP]
 
+.image megaphone.jpg _ 200
+
+.link https://hegde.live
+.link https://sudhir.live
+.link https://polarhive.net/wiki
