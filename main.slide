@@ -48,6 +48,14 @@ This was just a playful stunt that we engaged in. We planned on beating Saaru at
 
     In Kannada, rice is referred to as 'anna' (ಅನ್ನ) pronounced /ɐnːɐ/
 
+## Starting Point: CLI Development
+
+Our journey began with developing a command-line interface (CLI) for our static site generator. We used the Cobra library to create a robust and user-friendly CLI. Cobra's features allowed us to easily define commands, flags, and commands, making our tool intuitive and efficient for users.
+
+All the available flags and options can be viewed by entering *anna -h*
+
+By leveraging Cobra, we provided a structured and organized interface, enabling users to interact with our static site generator seamlessly. This foundation set the stage for implementing additional features and optimizations.
+
 ## RSS/Atom feed
 
 .code -edit ./benchmarking/main.go
@@ -158,4 +166,15 @@ Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison 
 ## Search / Tags
 
 .code -edit ./deepdatamerge/main.go
+
+## Future Feature Additions 
+
+*WebAssembly Integration:*
+- Implement Wasm to enable native code compilation in the browser.
+- Enhance static site functionality with dynamic elements and extended plugin capabilities.
+
+*Compatibility with Hugo SSG Themes:*
+- Provide Compatibility with Hugo Theme another widely used SSG implemented in GoLang.
+- Access a wide range of themes from Hugo's extensive community ecosystem.
+
 
