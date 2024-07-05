@@ -135,7 +135,7 @@ To further enhance performance, future plans include:
 With all current optimizations and future plans in place, we recognized the need for a comprehensive benchmarking and stress testing strategy to evaluate our progress and compare it against competitors. This involves:
 
 *Base Performance Metrics:*
-- Measure key performance indicators (KPIs) such as render time, memory usage, and CPU utilization for our static site generator with the help of the profiling system already set up.
+- Measure key performance indicators such as render time, memory usage, and CPU utilization for our static site generator with the help of the profiling system already set up.
 
 *Creating Benchmarking Scenarios:*
 - Develop a variety of test cases, including different site sizes, complexity levels, and types of content, to assess performance under various conditions.
