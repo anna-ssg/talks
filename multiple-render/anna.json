@@ -1,0 +1,6 @@
+{
+  "siteDataPaths": {
+    "landing_page": "site/",
+    "blog_page": "blogs/"
+  }
+}

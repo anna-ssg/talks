@@ -1,0 +1,8 @@
+{{ if $PageData.LiveReload }}
+<script>
+const eventSource = new EventSource("http://localhost:8000/events");
+eventSource.onmessage = function (event) {
+    location.reload();
+};
+</script>
+{{ end }}

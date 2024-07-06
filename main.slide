@@ -7,13 +7,11 @@ Adhesh Athrey, Aditya Hegde, Anirudh Sudhir, Nathan Paul
 *gh/anna-ssg*
 
 // tagline
-## Anna is designed to be fast, highly configurable and easy to use. 
+## Anna is designed to be fast, highly configurable and easy to use.
 
 Currently, anna beats Hugo and Eleventy another widely used static site generator implemented in JavaScript, on several benchmarks
 
-.image anna.png _ 300 
-
-.caption Anna pixelart by Aditya Hegde
+.image anna.png _ 300
 
 // slides start from here
 ## What does a static site generator do?
@@ -36,8 +34,8 @@ Each of us creating our own prototype of the SSG. This was done to familiarize e
 
 The first version of the SSG did just **three** things.
 
-- It rendered markdown (stored in files in a content folder in the project directory) to HTML. 
-- This HTML was injected into a layout.html file and served over a local web server. 
+- It rendered markdown (stored in files in a content folder in the project directory) to HTML.
+- This HTML was injected into a layout.html file and served over a local web server.
 - Later, we implemented a front matter YAML parser to retrieve page metadata
 
 ## What's in a name?
@@ -56,10 +54,6 @@ All the available flags and options can be viewed by entering *anna -h*
 
 By leveraging Cobra, we provided a structured and organized interface, enabling users to interact with our static site generator seamlessly. This foundation set the stage for implementing additional features and optimizations.
 
-## RSS/Atom feed
-
-.code -edit ./benchmarking/main.go
-
 ## Profiling
 
 The project's primary goal was to optimize performance. To achieve this, the first task undertaken was to implement a code profiling mechanism. This allowed the team to analyze the code's execution time and identify potential bottlenecks for further optimization.
@@ -68,13 +62,13 @@ The goal of the project was to optimize performance, and the team utilized the P
 
 ## Basic implementation
 
-.code -edit ./Profiling/main.go
+.code  ./Profiling/main.go
 
 ## Directory Watchdog and Live Render
 
 We implemented a directory watchdog system to streamline our workflow, avoiding the need to manually restart the program for code or content changes. This system monitors the working directory for modifications, automatically triggering a rerendering process and updating the output in real-time. Additionally, it serves the rendered content for easy previewing, allowing us to see changes immediately. This improvement has made our development process more efficient and seamless, enabling quick iterations without manual intervention.
 
-## POC 
+## POC
 
 We implemented a live reload system using a liveReload struct to enhance our development workflow. The struct maintains an error logger, a map of file modification times, directories to monitor, file extensions to watch, a server status flag, and the site data path.
 
@@ -82,27 +76,17 @@ We implemented a live reload system using a liveReload struct to enhance our dev
 
 The system scans specified directories for changes in files with given extensions. When a change in fileTimes is detected, it triggers the LiveReload pipeline to rerender content and update the output. This ensures real-time previews without manual intervention, enhancing development efficiency.
 
-## An important ease-of-use feature was a GUI
-
-The wizard lets a user pick a theme, enter your name, pick navbar elements, and validates fields using **regex** checks so you don’t need to worry about relative paths in baseURLs, canonical links, and sitemaps.
-
-.image https://anna-docs.netlify.app/posts/building-anna/images/wizard.gif 
-
-## After successfully completing the setup, the wizard launches a live preview of your site in a new tab.
-
-.code -edit ./wizard/main.go
-
-## Deepdatamerge
-
-.code -edit ./deepdatamerge/main.go
-
 ## Parallel Rendering pipelines
 
 To build a fast and efficient static site generator , we implemented parallel rendering using goroutines. Instead of rendering Markdown files iteratively, we utilized goroutines to process them concurrently.
 
 By spawning a goroutine for each Markdown file, we significantly reduced the rendering time. This approach leverages Go's concurrency model, allowing multiple files to be rendered simultaneously, thus improving overall performance.
 
-## Curent Parallel Rendering Pipeline Model 
+## Curent Parallel Rendering Pipeline Model
+
+.image ./diagrams/parallel_pipeline.png _ 800
+
+## Curent Parallel Rendering Pipeline Model
 
 .code ./ParaRender/main.go
 
@@ -153,21 +137,131 @@ With all current optimizations and future plans in place, we recognized the need
 
 ## Benchmark Data and Tested Cases and Related Information
 
-Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison from pre para render and post) and other ssg performance, and images if any, and write stuff if u want ill also look into it after u done
+// Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison from pre para render and post) and other ssg performance, and images if any, and write stuff if u want ill also look into it after u done
+
+- We have performed benchmark runs comparing our ssg's performance with others such as [Hugo](https://gohugo.io), [Eleventy](https://www.11ty.dev/), [Saaru](https://saaru-docs.netlify.app/) and [Sapling](https://sapling.navinshrinivas.com/)
+
+.code ./benchmarking/results
+
+## Benchmark Data and Tested Cases and Related Information
+
+.code ./benchmarking/result_summary
+
+## RSS/Atom feed
+
+// .code  ./benchmarking/main.go
+
+## An important ease-of-use feature was a GUI
+
+The wizard lets a user pick a theme, enter your name, pick navbar elements, and validates fields using **regex** checks so you don’t need to worry about relative paths in baseURLs, canonical links, and sitemaps.
+
+.image https://anna-docs.netlify.app/posts/building-anna/images/wizard.gif
+
+## After successfully completing the setup, the wizard launches a live preview of your site in a new tab.
+
+.code  ./wizard/main.go
 
 ## Bootstrapping themes
 
-.code -edit ./deepdatamerge/main.go
+- To enhance the choices available to the user, a collection of community-designed themes are maintained
+in a separate repository which can currently be installed via the web console GUI
+- These layouts are bundled together to be used as drop-in themes for any site
 
-## Collection support
+## Bootstrapping themes
 
-.code -edit ./deepdatamerge/main.go
+.code ./wizard/submission-handle.go
 
-## Search / Tags
+## Bootstrapping themes
 
-.code -edit ./deepdatamerge/main.go
+- During the process of extracting the layouts from the downloaded files, we perform final checks on the paths to ensure there are no conflicts with the expected order
 
-## Future Feature Additions 
+.code ./wizard/unzip.go
+
+//## Bootstrapping themes
+
+//.code ./wizard/main-wait.go
+
+## Deep Data Merge
+
+- During the render process, each template has access to the complete data of the site via the DeepDataMerge struct
+- This includes access to page template data, collections, configuration files, tags and a struct used to
+generate a JSON index of the site.
+
+## Deep Data Merge
+
+.code  ./deepdatamerge/deepdatamerge.go
+
+## Content Segregation
+
+## Content Segregation: Collections
+
+- Anna lets you aggregate pages as collections and nested collections to filter content on various parameters
+- Case in point: [HSP Members Page](https://wonderful-pegasus-a6899b.netlify.app/collections/members/)
+- Demo: [Anna weekly progress](https://anna-docs.netlify.app/collections)
+
+//.code  ./tags-collections/collections.go /START OMIT/,/END OMIT/
+
+## Content Segregation: Nested Collections
+
+- A page can be added to a nested collection using the "parent-collection>child-collection" syntax
+- This adds the page to both the parent as well as the child collection while maintaining hierarchy
+
+.code ./tags-collections/collections-parser-1.go
+
+## Content Seggregation
+
+.code ./tags-collections/collections-parser-2.go
+
+## Content Seggregation
+
+.image ./diagrams/nested_collections.png _ 900
+
+## Content Segregation: Tags
+
+- Tags allow for further categorisation of content and has a similar implementation as collections renderer
+
+//.code  ./tags-collections/tags.go
+
+## Multi Site Render
+
+- Multiple sites can be rendered independently by anna
+- The render requirements can be configured via an "anna.json" file at the directory root
+
+.code ./multiple-render/anna.json
+
+## Render Managers: Vanilla Render
+
+- The muliple site rendering is made possible by RenderManager() functions
+which manage the directory paths on which VanillaRender() or LiveReload() must be invoked
+
+.code ./multiple-render/vanilla_manager.go
+
+## Render Managers: Live Reload
+
+- The Live Reload Manager ensures that the site to be served, which is specified by the `-s`
+command-line flag, is a valid site path mentioned in `anna.json` and invokes LiveReload()
+
+.code ./multiple-render/livereload_manager.go
+
+## Browser-side live reload
+
+- Anna performs a re-render of the site on changes to the markdown files while serving
+- It also performs browser-side live reload, eliminating the need for the user to reload the page manually
+- An atomic boolean is used to determine if the page is to be reloaded or not
+
+.code ./LiveReload/event-handle.go
+
+## Browser-side live reload
+
+- The server-sent event script is injected into the site pages during the live-reload mode
+to listen for changes and auto-reload the browser
+
+.code ./LiveReload/browser-reload.go
+
+.code ./LiveReload/browser.html
+
+
+## Future Additions
 
 *WebAssembly Integration:*
 - Implement Wasm to enable native code compilation in the browser.
@@ -177,4 +271,11 @@ Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison 
 - Provide Compatibility with Hugo Theme another widely used SSG implemented in GoLang.
 - Access a wide range of themes from Hugo's extensive community ecosystem.
 
+## Usecases
+We use anna personal websites, and wikis. An in the works, our redesigned college club website [HSP]
 
+.image megaphone.jpg _ 200
+
+.link https://hegde.live
+.link https://sudhir.live
+.link https://polarhive.net/wiki

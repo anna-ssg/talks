@@ -1,0 +1,6 @@
+Summary
+  'cd /tmp/bench/saaru && ./saaru --base-path ./docs' ran
+    1.53 ± 0.04 times faster than 'cd /tmp/bench/sapling/benchmark && ./../sapling run'
+    1.88 ± 0.03 times faster than 'cd /tmp/bench/anna && ./anna -r "site/"'
+    3.63 ± 0.07 times faster than 'cd /tmp/bench/hugo && hugo'
+    9.02 ± 0.18 times faster than 'cd /tmp/bench/11ty && npx @11ty/eleventy'
