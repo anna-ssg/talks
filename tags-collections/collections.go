@@ -82,5 +82,3 @@ func (e *Engine) RenderCollections(fileOutPath string, templ *template.Template)
 	// Wait for all goroutines to finish
 	wg.Wait()
 }
-
-// END OMIT

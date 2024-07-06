@@ -18,7 +18,7 @@ Currently, anna beats Hugo and Eleventy another widely used static site generato
 
 A Static Site Generator (SSG) merges templates with content files to produce static websites by converting markdown into static HTML files, resulting in fast and easy-to-maintain websites.
 
-.image https://raw.githubusercontent.com/GolangUA/gopher-logos/master/PNG/gopher_nerd.png _ 300
+.image gopher_nerd.png _ 300
 
 .caption Fan art variation of the Go mascot, modified by Nats Romanova. CC BY-3.0
 
@@ -44,7 +44,8 @@ Probably the first thing that the four of us came across when joining ACM and HS
 
 This was just a playful stunt that we engaged in. We planned on beating Saaru at site render times, optimizing at runtime.
 
-    In Kannada, rice is referred to as 'anna' (ಅನ್ನ) pronounced /ɐnːɐ/
+    In Kannada, rice is referred to as (ಅನ್ನ) pronounced: /ɐnːɐ/
+
 
 ## Starting Point: CLI Development
 
@@ -56,9 +57,9 @@ By leveraging Cobra, we provided a structured and organized interface, enabling 
 
 ## Profiling
 
-The project's primary goal was to optimize performance. To achieve this, the first task undertaken was to implement a code profiling mechanism. This allowed the team to analyze the code's execution time and identify potential bottlenecks for further optimization.
+// The project's primary goal was to optimize performance. To achieve this, the first task undertaken was to implement a code profiling mechanism. This allowed the team to analyze the code's execution time and identify potential bottlenecks for further optimization.
 
-The goal of the project was to optimize performance, and the team utilized the Pprof library as a one-stop solution for profiling and performance analysis. By implementing a code profiling mechanism using Pprof, the team was able to analyze the execution time of the code and identify potential bottlenecks for further optimization. This allowed them to focus on improving the performance of the static site generator and achieve faster rendering times. The Pprof library provided valuable insights into the code's execution, enabling the team to make informed decisions and optimize the performance of the project effectively.
+Team utilized the Pprof library as a one-stop solution for profiling and performance analysis. By implementing a code profiling mechanism using Pprof, the team was able to analyze the execution time of the code and identify potential bottlenecks for further optimization. This allowed them to focus on improving the performance of the static site generator and achieve faster rendering times. The Pprof library provided valuable insights into the code's execution, enabling the team to make informed decisions and optimize the performance of the project effectively.
 
 ## Basic implementation
 
@@ -75,6 +76,7 @@ We implemented a live reload system using a liveReload struct to enhance our dev
 .code ./LiveReload/main.go /START OMIT/,/END OMIT/
 
 The system scans specified directories for changes in files with given extensions. When a change in fileTimes is detected, it triggers the LiveReload pipeline to rerender content and update the output. This ensures real-time previews without manual intervention, enhancing development efficiency.
+
 
 ## Parallel Rendering pipelines
 
@@ -119,7 +121,7 @@ To further enhance performance, future plans include:
 With all current optimizations and future plans in place, we recognized the need for a comprehensive benchmarking and stress testing strategy to evaluate our progress and compare it against competitors. This involves:
 
 *Base Performance Metrics:*
-- Measure key performance indicators such as render time, memory usage, and CPU utilization for our static site generator with the help of the profiling system already set up.
+- Measure key performance indicators (KPIs) such as render time, memory usage, and CPU utilization for our static site generator with the help of the profiling system already set up.
 
 *Creating Benchmarking Scenarios:*
 - Develop a variety of test cases, including different site sizes, complexity levels, and types of content, to assess performance under various conditions.
@@ -137,8 +139,6 @@ With all current optimizations and future plans in place, we recognized the need
 
 ## Benchmark Data and Tested Cases and Related Information
 
-// Hegde put the pprof svg, benchmarking numbers (if possible graphs of comparison from pre para render and post) and other ssg performance, and images if any, and write stuff if u want ill also look into it after u done
-
 - We have performed benchmark runs comparing our ssg's performance with others such as [Hugo](https://gohugo.io), [Eleventy](https://www.11ty.dev/), [Saaru](https://saaru-docs.netlify.app/) and [Sapling](https://sapling.navinshrinivas.com/)
 
 .code ./benchmarking/results
@@ -147,35 +147,95 @@ With all current optimizations and future plans in place, we recognized the need
 
 .code ./benchmarking/result_summary
 
-## RSS/Atom feed
 
-// .code  ./benchmarking/main.go
+## RSS / Atom feed
 
-## An important ease-of-use feature was a GUI
+RSS and Atom feeds are standardized formats used for distributing and accessing updates from websites. They provide structured metadata such as titles, links, and publication dates, allowing users and applications to efficiently stay informed about new content without visiting each site individually
+
+You get to read articles offline and cache posts for later use. You can follow websites made with anna inside Brave (a popular web browser), Thunderbird or newsboat like I do.
+
+Users can have blog sites of their own and do not have to worry about distribution or managing newsfeeds. Feeds in anna are turned on by default.
+
+## A buffer is used to efficiently build the XML content before writing it to the file.
+This avoids multiple file writes, which is slower.
+
+.code ./Feed/feed1.go
+
+Adding XML declaration and initializing root <rss> elements in buffer.
+
+.code ./Feed/feed2.go
+
+## Filtering and sorting posts by publication date
+We don't want draft posts to show up!
+
+.code ./Feed/feed3.go
+
+Your RSS reader should pick it up, but let's sort them to ensure they make semantic sense.
+
+## Generating XML entries for the body
+for each sorted post and writing to a file
+
+.code ./Feed/feed4.go
+
+## For Robots 🤖
+A sitemap tells web crawlers how your site is structured, outlining how often different pages are updated and helping search engines index your content efficiently.
+
+.code ./Feed/robots.txt
+
+.image ./Feed/seo.png
+
+## A buffer is used similar to the atom feed
+
+.code ./Feed/sitemap1.go
+
+.code ./Feed/sitemap2.go
+
+## For Humans 👾
+An important ease-of-use feature was building a GUI
 
 The wizard lets a user pick a theme, enter your name, pick navbar elements, and validates fields using **regex** checks so you don’t need to worry about relative paths in baseURLs, canonical links, and sitemaps.
 
-.image https://anna-docs.netlify.app/posts/building-anna/images/wizard.gif
+.image wizard.gif
+
+## Bootstrapping themes
+A catalog of themes are up on our GitHub, with a json index. Anna pulls the latest ones, populates a list of themes you can pick with the wizard.
+
+.code -edit ./BootstrapThemes/themes.go
+
+## Asynchronous
+Signals are asynchronous processed using a channel (FormSubmittedCh)
+
+.code -edit ./Wizard/wizard1.go
+
+## After successfully completing the setup, the wizard launches a live preview of your site in a new tab
+
+.code -edit ./Wizard/wizard2.go
+
+This ensures robust error handling for various stages like JSON decoding, file writing, and theme downloading.
+
+// ## An important ease-of-use feature was a GUI
+
+// The wizard lets a user pick a theme, enter your name, pick navbar elements, and validates fields using **regex** checks so you don’t need to worry about relative paths in baseURLs, canonical links, and sitemaps.
+
+// .image https://anna-docs.netlify.app/posts/building-anna/images/wizard.gif
 
 ## After successfully completing the setup, the wizard launches a live preview of your site in a new tab.
 
-.code  ./wizard/main.go
 
-## Bootstrapping themes
+// ## Bootstrapping themes
 
-- To enhance the choices available to the user, a collection of community-designed themes are maintained
-in a separate repository which can currently be installed via the web console GUI
-- These layouts are bundled together to be used as drop-in themes for any site
+// - To enhance the choices available to the user, a collection of community-designed themes are maintained in a separate repository which can currently be installed via the web console GUI
+// - These layouts are bundled together to be used as drop-in themes for any site
 
-## Bootstrapping themes
+// ## Bootstrapping themes
 
-.code ./wizard/submission-handle.go
+// .code ./wizard/submission-handle.go
 
-## Bootstrapping themes
+// ## Bootstrapping themes
 
-- During the process of extracting the layouts from the downloaded files, we perform final checks on the paths to ensure there are no conflicts with the expected order
+// - During the process of extracting the layouts from the downloaded files, we perform final checks on the paths to ensure there are no conflicts with the expected order
 
-.code ./wizard/unzip.go
+// .code ./wizard/unzip.go
 
 //## Bootstrapping themes
 
@@ -268,11 +328,11 @@ to listen for changes and auto-reload the browser
 - Enhance static site functionality with dynamic elements and extended plugin capabilities.
 
 *Compatibility with Hugo SSG Themes:*
-- Provide Compatibility with Hugo Theme another widely used SSG implemented in GoLang.
+- Provide Compatibility with Hugo themes, another widely used SSG implemented in GoLang.
 - Access a wide range of themes from Hugo's extensive community ecosystem.
 
 ## Usecases
-We use anna personal websites, and wikis. An in the works, our redesigned college club website [HSP]
+We use anna personal websites, and wikis. An in the works, our redesigned college club website [HSP](https://wonderful-pegasus-a6899b.netlify.app/)
 
 .image megaphone.jpg _ 200
 

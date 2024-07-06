@@ -17,7 +17,8 @@ func (e *Engine) RenderUserDefinedPages(fileOutPath string, templates *template.
 				<-semaphore
 				wg.Done()
 			}()
-			e.RenderPage(fileOutPath, template.URL(templateURL), templates, e.DeepDataMerge.Templates[template.URL(templateURL)].Frontmatter.Layout)
+			e.RenderPage(fileOutPath, template.URL(templateURL), templates,
+				e.DeepDataMerge.Templates[template.URL(templateURL)].Frontmatter.Layout)
 		}(templateURL)
 	}
 	wg.Wait()
